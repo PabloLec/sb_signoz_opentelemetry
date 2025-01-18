@@ -56,27 +56,32 @@ receivers:
               - localhost:8888
             labels:
               job_name: otel-collector
+  mongodb:
+    hosts:
+      - endpoint: mongo:27017
+    username: signoz
+    password: signoz
+    collection_interval: 60s
+    tls:
+      insecure: true
+      insecure_skip_verify: true
+    metrics:
+      mongodb.lock.acquire.count:
+        enabled: true
+      mongodb.lock.acquire.time:
+        enabled: true
+      mongodb.lock.acquire.wait_count:
+        enabled: true
+      mongodb.lock.deadlock.count:
+        enabled: true
+      mongodb.operation.latency.time:
+        enabled: true
 
 processors:
   batch:
     send_batch_size: 10000
     send_batch_max_size: 11000
     timeout: 10s
-  # memory_limiter:
-  #   # 80% of maximum memory up to 2G
-  #   limit_mib: 1500
-  #   # 25% of limit up to 2G
-  #   spike_limit_mib: 512
-  #   check_interval: 5s
-  #
-  #   # 50% of the maximum memory
-  #   limit_percentage: 50
-  #   # 20% of max memory usage spike expected
-  #   spike_limit_percentage: 20
-  # queued_retry:
-  #   num_workers: 4
-  #   queue_size: 100
-  #   retry_on_failure: true
   resourcedetection:
     # Using OTEL_RESOURCE_ATTRIBUTES envvar, env detector adds custom labels.
     detectors: [env, system] # include ec2 for AWS, gcp for GCP and azure for Azure.
@@ -165,3 +170,7 @@ service:
       receivers: [otlp, tcplog/docker]
       processors: [batch]
       exporters: [clickhouselogsexporter]
+    metrics/mongodb:
+      receivers: [mongodb]
+      processors: [resourcedetection]
+      exporters: [clickhousemetricswritev2]

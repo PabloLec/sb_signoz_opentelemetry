@@ -6,8 +6,8 @@ spring:
       port: 8081
   data:
     mongodb:
-      host: localhost
-      port: 27018
+      host: mongo
+      port: 27017
       database: webapi_db
       username: appuser
       password: apppassword
@@ -19,7 +19,7 @@ spring:
           contentType: application/json
       kafka:
         binder:
-          brokers: localhost:9092
+          brokers: kafka:9092
           autoCreateTopics: true
 
 server:
