@@ -1,5 +1,6 @@
 include:
   - ./webapi-service/docker-compose.yml
+  - ./async-service/docker-compose.yml
   - ./signoz/docker-compose.yml
   - ./kafka.yml
 
