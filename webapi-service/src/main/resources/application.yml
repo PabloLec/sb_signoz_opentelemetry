@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: webapi-service
+  web:
+    server:
+      port: 8081
+  data:
+    mongodb:
+      host: localhost
+      port: 27018
+      database: webapi_db
+      username: appuser
+      password: apppassword
+  cloud:
+    stream:
+      bindings:
+        user-out-0:
+          destination: user
+          contentType: application/json
+      kafka:
+        binder:
+          brokers: localhost:9092
+          autoCreateTopics: true
+
+server:
+  port: 8081
